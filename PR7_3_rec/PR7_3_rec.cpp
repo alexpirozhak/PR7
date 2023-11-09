@@ -3,24 +3,6 @@
 #include <time.h>
 using namespace std;
 
-void AllocateMatrix(int** a, int rowCount, int colCount, int i)
-{
-	a[i] = new int[colCount];
-	
-	if (i < rowCount - 1)
-		AllocateMatrix(a, rowCount, colCount, i + 1);
-}
-
-void FreeMatrix(int** a, int rowCount, int i)
-{
-	delete[] a[i];
-
-	if (i < rowCount - 1)
-		FreeMatrix(a, rowCount, i + 1);
-	else
-		delete[] a;
-}
-
 void Create(int** a, const int rowCount, const int colCount, const int Low, const int High, int i, int j)
 {
 	a[i][j] = Low + rand() % (High - Low + 1);
@@ -173,7 +155,8 @@ int main()
 	int rowCount = k;
 	int colCount = n;
 	int** a = new int*[rowCount];
-	AllocateMatrix(a, rowCount, colCount, 0);
+	for (int i = 0; i < rowCount; i++)
+		a[i] = new int[colCount];
 
 	Create(a, rowCount, colCount, Low, High, 0, 0);
 	//Input(a, rowCount, colCount, 0, 0);
@@ -186,7 +169,9 @@ int main()
 	Task2(a, rowCount, colCount, max);
 	cout << "max = " << max << endl;
 
-	FreeMatrix(a, rowCount, 0);
+	for (int i = 0; i < rowCount; i++)
+		delete[] a[i];
+	delete[] a;
 
 	return 0;
 }
